@@ -1,0 +1,619 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Eid ul Adha Mubarak BY INZI</title>
+    <link href="https://fonts.googleapis.com/css2?family=Amiri:wght@400;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary-color: #000000;
+            --secondary-color: #f8b400;
+            --accent-color: #001616;
+            --text-color: #333;
+            --light-color:rgb(214, 183, 81);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Amiri', serif;
+            color: var(--text-color);
+            overflow-x: hidden;
+            background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+        }
+
+        #loading-screen {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: var(--dark-color);
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            z-index: 9999;
+        }
+
+        .loader {
+            border: 5px solid #f3f3f3;
+            border-top: 5px solid var(--primary-color);
+            border-radius: 50%;
+            width: 50px;
+            height: 50px;
+            animation: spin 2s linear infinite;
+            margin-bottom: 20px;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        #scene-container {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+        }
+
+        .content-overlay {
+            position: relative;
+            z-index: 1;
+            padding: 2rem;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        header {
+            text-align: center;
+            margin-bottom: 3rem;
+            animation: fadeIn 1.5s ease-out;
+        }
+
+        .animated-text {
+            font-size: 3.5rem;
+            color: var(--primary-color);
+            text-shadow: 2px 2x 2px gba(2, 0, 0, 0.1);
+            position: relative;
+            display: inline-block;
+        }
+
+        .animated-text::after {
+            content: '';
+            position: absolute;
+            bottom: -10px;
+            left: 0;
+            width: 100%;
+            height: 3px;
+            background: var(--secondary-color);
+            transform: scaleX(0);
+            transform-origin: right;
+            animation: underline 2s ease-in-out infinite;
+        }
+
+        @keyframes underline {
+            0% { transform: scaleX(0); transform-origin: right; }
+            50% { transform: scaleX(1); transform-origin: right; }
+            51% { transform-origin: left; }
+            100% { transform: scaleX(0); transform-origin: left; }
+        }
+
+        .subtitle {
+            font-size: 1.2rem;
+            color: var(--accent-color);
+            margin-top: 1rem;
+        }
+
+        .greeting-card {
+            perspective: 1000px;
+            width: 300px;
+            height: 400px;
+            margin: 0 auto 3rem;
+        }
+
+        .card-inner {
+            position: relative;
+            width: 100%;
+            height: 100%;
+            transition: transform 0.8s;
+            transform-style: preserve-3d;
+        }
+
+        .greeting-card:hover .card-inner {
+            transform: rotateY(180deg);
+        }
+
+        .card-front, .card-back {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            backface-visibility: hidden;
+            border-radius: 15px;
+            padding: 2rem;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+        }
+
+        .card-front {
+            background: linear-gradient(135deg, var(--primary-color) 0%, var(--accent-color) 100%);
+            color: white;
+        }
+
+        .card-back {
+            background-color: white;
+            transform: rotateY(180deg);
+        }
+
+        .mosque-icon {
+            width: 100px;
+            height: 100px;
+            background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><path fill="%23ffffff" d="M256 0c-17.7 0-32 14.3-32 32V66.7C167.2 81.9 112 160 112 250.1V512H400V250.1c0-90.1-55.2-168.2-112-183.4V32c0-17.7-14.3-32-32-32zM144 250.1c0-59.9 36.1-111.4 87.5-134.1l-7.5-14.7-7.5 14.7c51.4 22.7 87.5 74.2 87.5 134.1V464H144V250.1zM32 128c-17.7 0-32 14.3-32 32v64c0 17.7 14.3 32 32 32s32-14.3 32-32V160c0-17.7-14.3-32-32-32zm448 0c-17.7 0-32 14.3-32 32v64c0 17.7 14.3 32 32 32s32-14.3 32-32V160c0-17.7-14.3-32-32-32z"/></svg>');
+            background-size: contain;
+            background-repeat: no-repeat;
+            background-position: center;
+            margin-bottom: 2rem;
+            animation: float 3s ease-in-out infinite;
+        }
+
+        @keyframes float {
+            0% { transform: translateY(0); }
+            50% { transform: translateY(-15px); }
+            100% { transform: translateY(0); }
+        }
+
+        .message {
+            font-size: 1.1rem;
+            line-height: 1.6;
+            text-align: center;
+            margin-bottom: 2rem;
+        }
+
+        button {
+            background-color: var(--secondary-color);
+            color: white;
+            border: none;
+            padding: 0.8rem 1.5rem;
+            border-radius: 50px;
+            font-family: inherit;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        button:hover {
+            background-color: var(--primary-color);
+            transform: translateY(-3px);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+        }
+
+        .countdown {
+            text-align: center;
+            margin-bottom: 3rem;
+        }
+
+        .countdown h3 {
+            font-size: 1.5rem;
+            margin-bottom: 1.5rem;
+            color: var(--accent-color);
+        }
+
+        .timer {
+            display: flex;
+            justify-content: center;
+            gap: 1.5rem;
+        }
+
+        .time-box {
+            background-color: white;
+            padding: 1rem 1.5rem;
+            border-radius: 10px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+            min-width: 80px;
+        }
+
+        .time-box span {
+            font-size: 2.5rem;
+            font-weight: bold;
+            color: var(--primary-color);
+            display: block;
+        }
+
+        .time-box small {
+            color: var(--text-color);
+            font-size: 0.9rem;
+        }
+
+        .social-share {
+            display: flex;
+            justify-content: center;
+            gap: 1rem;
+            margin-bottom: 2rem;
+        }
+
+        .social-btn {
+            padding: 0.6rem 1.2rem;
+            font-size: 0.9rem;
+        }
+
+        .facebook { background-color: #3b5998; }
+        .twitter { background-color: #1da1f2; }
+        .whatsapp { background-color: #25d366; }
+
+        .copyright {
+            text-align: center;
+            color: var(--text-color);
+            opacity: 0.7;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        @media (max-width: 768px) {
+            .content-overlay {
+                padding: 1rem;
+            }
+            
+            .animated-text {
+                font-size: 2.5rem;
+            }
+            
+            .timer {
+                flex-wrap: wrap;
+            }
+            
+            .social-share {
+                flex-direction: column;
+                align-items: center;
+            }
+            
+            .social-btn {
+                width: 200px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div id="loading-screen">
+        <div class="loader"></div>
+        <p>Loading Eid Greetings...</p>
+    </div>
+
+    <div id="scene-container">
+        <!-- 3D scene will be rendered here by Three.js -->
+    </div>
+
+    <div class="content-overlay">
+        <header>
+            <h1 class="animated-text">Eid ul Adha Mubarak by INZI</h1>
+            <p class="subtitle">May your sacrifices be accepted and your faith be strengthened</p>
+        </header>
+
+        <main>
+            <div class="greeting-card">
+                <div class="card-inner">
+                    <div class="card-front">
+                        <div class="mosque-icon"></div>
+                        <h2>Click to Open</h2>
+                    </div>
+                    <div class="card-back">
+                        <p class="message">On this blessed occasion of Eid ul Adha, may Allah accept your sacrifices, 
+                        forgive your sins, and grant you and your family happiness, peace, and prosperity.</p>
+                        <button id="share-btn">Share Greetings</button>
+                    </div>
+                </div>
+            </div>
+
+            <div class="countdown">
+                <h3>Eid ul Adha Countdown</h3>
+                <div class="timer">
+                    <div class="time-box">
+                        <span id="days">00</span>
+                        <small>Days</small>
+                    </div>
+                    <div class="time-box">
+                        <span id="hours">00</span>
+                        <small>Hours</small>
+                    </div>
+                    <div class="time-box">
+                        <span id="minutes">00</span>
+                        <small>Minutes</small>
+                    </div>
+                    <div class="time-box">
+                        <span id="seconds">00</span>
+                        <small>Seconds</small>
+                    </div>
+                </div>
+            </div>
+        </main>
+
+        <footer>
+            <div class="social-share">
+                <button class="social-btn facebook">Share on Facebook</button>
+                <button class="social-btn twitter">Share on Twitter</button>
+                <button class="social-btn whatsapp">Share on WhatsApp</button>
+            </div>
+            <p class="copyright">© 2025 Eid ul Adha Greetings | Designed by INZI HACKER ❤️</p>
+        </footer>
+    </div>
+
+    <audio id="eid-audio" loop>
+        <!-- Audio will be handled by JavaScript -->
+    </audio>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/gsap@3.11.4/dist/gsap.min.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Hide loading screen after everything loads
+            window.addEventListener('load', function() {
+                setTimeout(function() {
+                    document.getElementById('loading-screen').style.opacity = '0';
+                    setTimeout(function() {
+                        document.getElementById('loading-screen').style.display = 'none';
+                        // Start background audio (commented out as we don't have actual audio file)
+                        // document.getElementById('eid-audio').volume = 0.3;
+                        // document.getElementById('eid-audio').play();
+                    }, 500);
+                }, 1500);
+            });
+
+            // Initialize 3D scene
+            init3DScene();
+            
+            // Set up countdown
+            setupCountdown();
+            
+            // Set up event listeners
+            setupEventListeners();
+        });
+
+        function init3DScene() {
+            const sceneContainer = document.getElementById('scene-container');
+            
+            // Scene setup
+            const scene = new THREE.Scene();
+            const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
+            const renderer = new THREE.WebGLRenderer({ alpha: true, antialias: true });
+            renderer.setSize(window.innerWidth, window.innerHeight);
+            sceneContainer.appendChild(renderer.domElement);
+            
+            // Lights
+            const ambientLight = new THREE.AmbientLight(0xffffff, 0.5);
+            scene.add(ambientLight);
+            
+            const directionalLight = new THREE.DirectionalLight(0xffffff, 0.8);
+            directionalLight.position.set(1, 1, 1);
+            scene.add(directionalLight);
+            
+            // Create a 3D mosque model
+            createMosqueModel(scene);
+            
+            // Create floating Eid text
+            createFloatingText(scene);
+            
+            // Camera position
+            camera.position.z = 5;
+            
+            // Animation loop
+            function animate() {
+                requestAnimationFrame(animate);
+                
+                // Rotate the scene slowly
+                scene.rotation.y += 0.001;
+                
+                renderer.render(scene, camera);
+            }
+            
+            animate();
+            
+            // Handle window resize
+            window.addEventListener('resize', function() {
+                camera.aspect = window.innerWidth / window.innerHeight;
+                camera.updateProjectionMatrix();
+                renderer.setSize(window.innerWidth, window.innerHeight);
+            });
+        }
+
+        function createMosqueModel(scene) {
+            // Base
+            const baseGeometry = new THREE.BoxGeometry(3, 0.2, 3);
+            const baseMaterial = new THREE.MeshPhongMaterial({ 
+                color: 0x2c786c,
+                shininess: 100
+            });
+            const base = new THREE.Mesh(baseGeometry, baseMaterial);
+            scene.add(base);
+            
+            // Main building
+            const buildingGeometry = new THREE.BoxGeometry(2, 1, 2);
+            const buildingMaterial = new THREE.MeshPhongMaterial({ 
+                color: 0xf8b400,
+                shininess: 50
+            });
+            const building = new THREE.Mesh(buildingGeometry, buildingMaterial);
+            building.position.y = 0.6;
+            scene.add(building);
+            
+            // Dome
+            const domeGeometry = new THREE.SphereGeometry(0.6, 32, 32, 0, Math.PI * 2, 0, Math.PI / 2);
+            const domeMaterial = new THREE.MeshPhongMaterial({ 
+                color: 0x004445,
+                shininess: 100
+            });
+            const dome = new THREE.Mesh(domeGeometry, domeMaterial);
+            dome.position.y = 1.6;
+            dome.rotation.x = Math.PI;
+            scene.add(dome);
+            
+            // Minarets
+            const minaretGeometry = new THREE.CylinderGeometry(0.15, 0.1, 1.5, 32);
+            const minaretMaterial = new THREE.MeshPhongMaterial({ color: 0x2c786c });
+            
+            for (let i = 0; i < 4; i++) {
+                const minaret = new THREE.Mesh(minaretGeometry, minaretMaterial);
+                const angle = (i / 4) * Math.PI * 2;
+                const radius = 1.8;
+                minaret.position.x = Math.cos(angle) * radius;
+                minaret.position.z = Math.sin(angle) * radius;
+                minaret.position.y = 0.75;
+                scene.add(minaret);
+                
+                // Minaret tops
+                const topGeometry = new THREE.ConeGeometry(0.2, 0.4, 32);
+                const topMaterial = new THREE.MeshPhongMaterial({ color: 0xf8b400 });
+                const top = new THREE.Mesh(topGeometry, topMaterial);
+                top.position.y = 1.5;
+                minaret.add(top);
+            }
+            
+            // Animate the dome
+            gsap.to(dome.scale, {
+                y: 1.1,
+                duration: 2,
+                repeat: -1,
+                yoyo: true,
+                ease: "sine.inOut"
+            });
+        }
+
+        function createFloatingText(scene) {
+            // Eid Mubarak text representation
+            const textGeometry = new THREE.BoxGeometry(0.5, 0.2, 0.05);
+            const textMaterial = new THREE.MeshPhongMaterial({ 
+                color: 0xf8b400,
+                emissive: 0x444444,
+                emissiveIntensity: 0.5
+            });
+            
+            const letters = [];
+            const word1 = "EID";
+            const word2 = "MUBARAK";
+            
+            // Create floating letters for "EID"
+            for (let i = 0; i < word1.length; i++) {
+                const letter = new THREE.Mesh(textGeometry, textMaterial.clone());
+                letter.position.x = i * 0.6 - 0.6;
+                letter.position.y = 2;
+                letter.position.z = -1;
+                scene.add(letter);
+                letters.push(letter);
+                
+                // Animate each letter
+                gsap.to(letter.position, {
+                    y: 2 + Math.random() * 0.5,
+                    duration: 3,
+                    repeat: -1,
+                    yoyo: true,
+                    ease: "sine.inOut",
+                    delay: i * 0.2
+                });
+            }
+            
+            // Create floating letters for "MUBARAK"
+            for (let i = 0; i < word2.length; i++) {
+                const letter = new THREE.Mesh(textGeometry, textMaterial.clone());
+                letter.position.x = i * 0.6 - 1.8;
+                letter.position.y = 1.5;
+                letter.position.z = -1;
+                scene.add(letter);
+                letters.push(letter);
+                
+                // Animate each letter
+                gsap.to(letter.position, {
+                    y: 1.5 + Math.random() * 0.5,
+                    duration: 3,
+                    repeat: -1,
+                    yoyo: true,
+                    ease: "sine.inOut",
+                    delay: i * 0.2
+                });
+            }
+        }
+
+        function setupCountdown() {
+            // Set the date for Eid ul Adha (example date - 6 days from now)
+            const eidDate = new Date();
+            eidDate.setDate(eidDate.getDate() + 0 );
+            
+            function updateCountdown() {
+                const now = new Date();
+                const diff = eidDate - now;
+                
+                if (diff <= 0) {
+                    document.getElementById('days').textContent = '00';
+                    document.getElementById('hours').textContent = '03';
+                    document.getElementById('minutes').textContent = '00';
+                    document.getElementById('seconds').textContent = '00';
+                    return;
+                }
+                
+                const days = Math.floor(diff / (1000 * 60 * 60 * 24));
+                const hours = Math.floor((diff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+                const minutes = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60));
+                const seconds = Math.floor((diff % (1000 * 60)) / 1000);
+                
+                document.getElementById('days').textContent = days.toString().padStart(2, '0');
+                document.getElementById('hours').textContent = hours.toString().padStart(2, '0');
+                document.getElementById('minutes').textContent = minutes.toString().padStart(2, '0');
+                document.getElementById('seconds').textContent = seconds.toString().padStart(2, '0');
+            }
+            
+            updateCountdown();
+            setInterval(updateCountdown, 1000);
+        }
+
+        function setupEventListeners() {
+            // Share button functionality
+            document.getElementById('share-btn').addEventListener('click', function() {
+                if (navigator.share) {
+                    navigator.share({
+                        title: 'Eid ul Adha Mubarak',
+                        text: 'Send this beautiful 3D Eid greeting to your loved ones!',
+                        url: window.location.href
+                    }).catch(err => {
+                        console.log('Error sharing:', err);
+                    });
+                } else {
+                    // Fallback for browsers that don't support Web Share API
+                    alert('Share this URL: ' + window.location.href);
+                }
+            });
+            
+            // Social media buttons
+            document.querySelector('.facebook').addEventListener('click', function() {
+                window.open(`https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(window.location.href)}`, '_blank');
+            });
+            
+            document.querySelector('.twitter').addEventListener('click', function() {
+                window.open(`https://twitter.com/intent/tweet?text=${encodeURIComponent('Eid ul Adha Mubarak! Check out this beautiful 3D greeting: ' + window.location.href)}`, '_blank');
+            });
+            
+            document.querySelector('.whatsapp').addEventListener('click', function() {
+                window.open(`https://wa.me/?text=${encodeURIComponent('Eid ul Adha Mubarak! 🌙 Check out this beautiful 3D greeting: ' + window.location.href)}`, '_blank');
+            });
+            
+            // Audio control on user interaction
+            document.body.addEventListener('click', function() {
+                const audio = document.getElementById('eid-audio');
+                if (audio.paused) {
+                    audio.play().catch(e => console.log('Audio play failed:', e));
+                }
+            }, { once: true });
+        }
+    </script>
+</body>
+</html>
